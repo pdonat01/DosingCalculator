@@ -64,8 +64,8 @@ namespace DosingCalculator
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 600);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(880, 600);
+            this.Text = "Complete Reef Care - 4-Part Dosing Calculator";
             BuildUi();
         }
 
@@ -74,12 +74,12 @@ namespace DosingCalculator
             int left = 20;
             int top = 20;
 
-            Controls.Add(new Label { Left = left, Top = top, Width = 220, Text = "Akvárium térfogat (liter):" });
+            Controls.Add(new Label { Left = left, Top = top, Width = 220, Text = "Water volume (liters):" });
             txtLiters = new TextBox { Left = left + 230, Top = top - 3, Width = 120, Text = "100" };
             Controls.Add(txtLiters);
 
-            // Profil választó (arányok)
-            Controls.Add(new Label { Left = left + 380, Top = top, Width = 120, Text = "Akvárium profil:" });
+            // Aquarium profile selector (ratios)
+            Controls.Add(new Label { Left = left + 380, Top = top, Width = 120, Text = "Reef profile:" });
             cmbProfile = new ComboBox
             {
                 Left = left + 500,
@@ -88,13 +88,13 @@ namespace DosingCalculator
                 DropDownStyle = ComboBoxStyle.DropDownList
             };
             foreach (var key in _profiles.Keys) cmbProfile.Items.Add(key);
-            cmbProfile.SelectedIndex = 1; // alapból Mixed Reef – Great/Great
+            cmbProfile.SelectedIndex = 1; // default: Mixed Reef – Great/Great
             Controls.Add(cmbProfile);
 
             top += 45;
 
-            Controls.Add(new Label { Left = left, Top = top, Width = 200, Text = "Kezdő értékek" });
-            Controls.Add(new Label { Left = left + 260, Top = top, Width = 200, Text = "Cél értékek" });
+            Controls.Add(new Label { Left = left, Top = top, Width = 200, Text = "Current values" });
+            Controls.Add(new Label { Left = left + 260, Top = top, Width = 200, Text = "Target values" });
             top += 30;
 
             // CA
@@ -106,7 +106,7 @@ namespace DosingCalculator
 
             top += 35;
 
-            // MG (most nem számoljuk, de megmarad)
+            // Mg (fields retained; not used in calculations)
             Controls.Add(new Label { Left = left, Top = top, Width = 70, Text = "Mg (ppm)" });
             txtStartMg = new TextBox { Left = left + 80, Top = top - 3, Width = 120, Text = "" };
             txtTargetMg = new TextBox { Left = left + 260, Top = top - 3, Width = 120, Text = "1350" };
@@ -124,8 +124,8 @@ namespace DosingCalculator
 
             top += 45;
 
-            // Napok száma
-            Controls.Add(new Label { Left = left, Top = top, Width = 220, Text = "Elosztás ennyi napra (int):" });
+            // Number of days
+            Controls.Add(new Label { Left = left, Top = top, Width = 220, Text = "Spread over (whole days):" });
             txtDays = new TextBox { Left = left + 230, Top = top - 3, Width = 120, Text = "4" };
             Controls.Add(txtDays);
 
@@ -135,21 +135,21 @@ namespace DosingCalculator
                 Top = top - 5,
                 Width = 140,
                 Height = 34,
-                Text = "Kiszámol"
+                Text = "Calculate"
             };
             btnCalc.Click += BtnCalc_Click;
             Controls.Add(btnCalc);
 
             top += 55;
 
-            // Eredmények - összes
-            lblTotalP1 = new Label { Left = left, Top = top, Width = 800, Text = "Part #1 (Ca) összesen: -" };
+            // Results - totals
+            lblTotalP1 = new Label { Left = left, Top = top, Width = 800, Text = "Part #1 (Ca) total: -" };
             top += 24;
-            lblTotalP2 = new Label { Left = left, Top = top, Width = 800, Text = "Part #2 (KH) összesen: -" };
+            lblTotalP2 = new Label { Left = left, Top = top, Width = 800, Text = "Part #2 (KH) total: -" };
             top += 24;
-            lblTotalP3 = new Label { Left = left, Top = top, Width = 800, Text = "Part #3 (Iodine - Potassium) összesen (arányos): -" };
+            lblTotalP3 = new Label { Left = left, Top = top, Width = 800, Text = "Part #3 (Iodine - Potassium) total (proportional): -" };
             top += 24;
-            lblTotalP4 = new Label { Left = left, Top = top, Width = 800, Text = "Part #4 (Trace) összesen (arányos): -" };
+            lblTotalP4 = new Label { Left = left, Top = top, Width = 800, Text = "Part #4 (Trace) total (proportional): -" };
             top += 34;
 
             Controls.Add(lblTotalP1);
@@ -157,14 +157,14 @@ namespace DosingCalculator
             Controls.Add(lblTotalP3);
             Controls.Add(lblTotalP4);
 
-            // Eredmények - napi
-            lblDailyP1 = new Label { Left = left, Top = top, Width = 800, Text = "Napi Part #1 (Ca): -" };
+            // Results - daily doses
+            lblDailyP1 = new Label { Left = left, Top = top, Width = 800, Text = "Daily Part #1 (Ca): -" };
             top += 24;
-            lblDailyP2 = new Label { Left = left, Top = top, Width = 800, Text = "Napi Part #2 (KH): -" };
+            lblDailyP2 = new Label { Left = left, Top = top, Width = 800, Text = "Daily Part #2 (KH): -" };
             top += 24;
-            lblDailyP3 = new Label { Left = left, Top = top, Width = 800, Text = "Napi Part #3 (Iodine - Potassium): -" };
+            lblDailyP3 = new Label { Left = left, Top = top, Width = 800, Text = "Daily Part #3 (Iodine - Potassium): -" };
             top += 24;
-            lblDailyP4 = new Label { Left = left, Top = top, Width = 800, Text = "Napi Part #4 (Trace): -" };
+            lblDailyP4 = new Label { Left = left, Top = top, Width = 800, Text = "Daily Part #4 (Trace): -" };
 
             Controls.Add(lblDailyP1);
             Controls.Add(lblDailyP2);
@@ -178,14 +178,14 @@ namespace DosingCalculator
                 Left = left,
                 Top = top,
                 Width = 820,
-                Height = 80,
+                Height = 100,
                 ForeColor = Color.DimGray,
                 Text =
-                    "Számítás alapja:\n" +
+                    "Calculation basis:\n" +
                     "Part #1: 1 ml / 100 L = +1.4 ppm Ca\n" +
                     "Part #2: 1 ml / 100 L = +0.1 dKH\n" +
-                    "Part #3 és #4: a kiválasztott profil táblázat-arányai szerint Part #1-hez arányosítva.\n" +
-                    "Mg célértéket itt nem emelünk külön (Part #3 emeléséhez külön konverzió kellene)."
+                    "Parts #3 and #4: proportional to Part #1 using the selected profile ratios.\n" +
+                    "Mg values are not used to calculate a separate correction dose."
             });
         }
 
@@ -193,13 +193,13 @@ namespace DosingCalculator
         {
             if (!TryParseDouble(txtLiters.Text, out double liters) || liters <= 0)
             {
-                MessageBox.Show("Adj meg érvényes litert (pozitív szám).");
+                MessageBox.Show("Enter a valid water volume in liters (a positive number).");
                 return;
             }
 
             if (!int.TryParse(txtDays.Text.Trim(), out int days) || days <= 0)
             {
-                MessageBox.Show("Adj meg érvényes nap számot (pozitív egész).");
+                MessageBox.Show("Enter a valid number of days (a positive whole number).");
                 return;
             }
 
@@ -208,13 +208,13 @@ namespace DosingCalculator
                 !TryParseDouble(txtStartKh.Text, out double startKh) ||
                 !TryParseDouble(txtTargetKh.Text, out double targetKh))
             {
-                MessageBox.Show("Ca és KH mezőkbe érvényes számokat adj meg.");
+                MessageBox.Show("Enter valid numbers in the current and target Ca and KH fields.");
                 return;
             }
 
             if (cmbProfile.SelectedItem == null)
             {
-                MessageBox.Show("Válassz akvárium profilt.");
+                MessageBox.Show("Select an aquarium profile.");
                 return;
             }
 
@@ -224,7 +224,7 @@ namespace DosingCalculator
             double deltaCa = targetCa - startCa; // ppm
             double deltaKh = targetKh - startKh; // dKH
 
-            // PDF alapján:
+            // Based on the Red Sea Complete Reef Care manual:
             // Part #1: 1 ml / 100 L -> +1.4 ppm Ca
             // Part #2: 1 ml / 100 L -> +0.1 dKH
             double mlP1 = 0;
@@ -234,36 +234,36 @@ namespace DosingCalculator
             if (deltaCa > 0)
                 mlP1 = (deltaCa / 1.4) * (liters / 100.0);
             else if (deltaCa < 0)
-                warnings += "A cél Ca kisebb mint a kezdő (csökkenteni kéne, nem adagolni).\n";
+                warnings += "Target Ca is below the current value. No Part #1 correction dose is calculated.\n";
 
             if (deltaKh > 0)
                 mlP2 = (deltaKh / 0.1) * (liters / 100.0);
             else if (deltaKh < 0)
-                warnings += "A cél KH kisebb mint a kezdő (csökkenteni kéne, nem adagolni).\n";
+                warnings += "Target KH is below the current value. No Part #2 correction dose is calculated.\n";
 
-            // Part #3 és #4: a táblázat arányai szerint Part #1-hez arányosítva
-            // pl. 4-8-2-2 => p3/p1 = 0.5, p4/p1=0.5
+            // Parts #3 and #4: proportional to Part #1 using the profile table ratios
+            // e.g. 4-8-2-2 => p3/p1 = 0.5, p4/p1 = 0.5
             double mlP3 = (ratios.p1 > 0) ? mlP1 * (ratios.p3 / ratios.p1) : 0;
             double mlP4 = (ratios.p1 > 0) ? mlP1 * (ratios.p4 / ratios.p1) : 0;
 
-            // Napi bontás
+            // Daily breakdown
             double dailyP1 = mlP1 / days;
             double dailyP2 = mlP2 / days;
             double dailyP3 = mlP3 / days;
             double dailyP4 = mlP4 / days;
 
-            lblTotalP1.Text = $"Part #1 (Ca) összesen: {mlP1:0.00} ml";
-            lblTotalP2.Text = $"Part #2 (KH) összesen: {mlP2:0.00} ml";
-            lblTotalP3.Text = $"Part #3 összesen (arányos): {mlP3:0.00} ml";
-            lblTotalP4.Text = $"Part #4 összesen (arányos): {mlP4:0.00} ml";
+            lblTotalP1.Text = $"Part #1 (Ca) total: {mlP1:0.00} ml";
+            lblTotalP2.Text = $"Part #2 (KH) total: {mlP2:0.00} ml";
+            lblTotalP3.Text = $"Part #3 total (proportional): {mlP3:0.00} ml";
+            lblTotalP4.Text = $"Part #4 total (proportional): {mlP4:0.00} ml";
 
-            lblDailyP1.Text = $"Napi Part #1: {dailyP1:0.00} ml / nap  (összes nap: {days})";
-            lblDailyP2.Text = $"Napi Part #2: {dailyP2:0.00} ml / nap  (összes nap: {days})";
-            lblDailyP3.Text = $"Napi Part #3: {dailyP3:0.00} ml / nap  (összes nap: {days})";
-            lblDailyP4.Text = $"Napi Part #4: {dailyP4:0.00} ml / nap  (összes nap: {days})";
+            lblDailyP1.Text = $"Daily Part #1: {dailyP1:0.00} ml / day  (total days: {days})";
+            lblDailyP2.Text = $"Daily Part #2: {dailyP2:0.00} ml / day  (total days: {days})";
+            lblDailyP3.Text = $"Daily Part #3: {dailyP3:0.00} ml / day  (total days: {days})";
+            lblDailyP4.Text = $"Daily Part #4: {dailyP4:0.00} ml / day  (total days: {days})";
 
             if (!string.IsNullOrWhiteSpace(warnings))
-                MessageBox.Show(warnings.Trim(), "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(warnings.Trim(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private bool TryParseDouble(string s, out double value)

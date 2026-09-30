@@ -14,9 +14,6 @@ namespace DosingCalculator
     {
         public Form1()
         {
-            Text = "Complete Reef Care - Part #1/#2 kalkulátor";
-            Width = 720;
-            Height = 420;
             Font = new Font("Segoe UI", 10);
 
             InitializeComponent();
